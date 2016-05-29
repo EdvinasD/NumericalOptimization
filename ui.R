@@ -1,4 +1,14 @@
-
+library(shiny)
+library(magrittr)
+library(googleVis)
+library(dplyr)
+library(ggvis)
+library(reshape2)
+library(stargazer)
+library(xtable)
+source("functions.R")
+source("GEfunction.R")
+source("functionsGE.R")
 
 shinyUI(
   navbarPage(
