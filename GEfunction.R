@@ -1,20 +1,21 @@
-
-
-
 GEsemi <- function(x, P, n, muta1 = 1, muta2 = 1, check.mutations=F) {
   # Finds optimal path between cities in given cordinates or distance matrix.
   #
   # Args:
-  #   x: if x is nxn matrix, then it is looked as distance matrix else 
-  #      euclidean distances are calculated between x rows.
-  #   P: population size
-  #   n: number of itrations
-  #   muta1: probability of having mutation type 1
-  #   muta2: probability of having mutation type 2
+  #   x:      if x is nxn matrix, then it is looked as distance matrix else 
+  #           euclidean distances are calculated between x rows.
+  #   P:      population size
+  #   n:      number of itrations
+  #   muta1:  probability of having mutation type 1
+  #   muta2:  probability of having mutation type 2
+  #   check.mutations: if mutations should be only performed if it decreases
+  #           distance
   #
   # Returns:
   #   list of best path, and paths which led to that
   #   optimization path
+  
+  
   
   # checks if x is distance matrix or not
   # x <- data
@@ -22,11 +23,13 @@ GEsemi <- function(x, P, n, muta1 = 1, muta2 = 1, check.mutations=F) {
     x <- as.matrix(dist(x))
   }
   
+  #number of cities
   n.cities <- nrow(x)
   
   x <- melt(x)
   x$key <- paste(x$Var1, x$Var2)
   
+  # function to evaluate distance
   TotalDistance <- function(y,x) {
     sum(x[x$key %in% paste(y, c(y[-1], y[1])),"value"])
   }
@@ -36,20 +39,28 @@ GEsemi <- function(x, P, n, muta1 = 1, muta2 = 1, check.mutations=F) {
   P.gen <- P.init
   path.best <- 1:n.cities
   best.dist <- TotalDistance(path.best,x)
+  
+  # number of iterations
   for (j in 1:n) {
     P.init <- P.gen
+    
+    # for each element in population
     for (i in 1:P) {
+      # random neighbor is selected
       random.neightbor <- P.init[sample(c(1:P)[1:P!=i],1),]
+      # main element 
       ele <- P.init[i, ]
+      # which connection to replace with random neighbors connection
       connection <- sample(1:n.cities,1)
       starting <- if (connection == 1) n.cities else connection-1
       ending <- connection %% n.cities + 1
       
+      # conetion in random neighbor
       sequance <- random.neightbor[
         which(random.neightbor==ele[(starting)]):
           which(random.neightbor==ele[(ending)])]
       
-      
+      # replacemanet process
       if (!ele[connection]%in%sequance & length(sequance)>2) {
         choose.from <- sequance[!sequance%in%ele[c(starting,connection,ending)]]
         if (length(choose.from) == 1){
@@ -88,6 +99,7 @@ GEsemi <- function(x, P, n, muta1 = 1, muta2 = 1, check.mutations=F) {
       
       new.dist <- TotalDistance(new,x)
       
+      # type 1 mutation where to conection is reversed 
       if(muta1 > runif(1)){
         mutated <- new
         which.mutate <- sample(2:n.cities,1)
@@ -106,7 +118,7 @@ GEsemi <- function(x, P, n, muta1 = 1, muta2 = 1, check.mutations=F) {
         
       }
       
-      
+      # type 2 mutation where to cities are swiched in path
       if(muta2 > runif(1)){
         mutated <- new
         to.switch <- sample(1:n.cities,2)
@@ -123,7 +135,7 @@ GEsemi <- function(x, P, n, muta1 = 1, muta2 = 1, check.mutations=F) {
         }
       }
       
-      
+      # if new element is better then old one old one is replaced
       if(new.dist<TotalDistance(P.init[i, ],x)){
         P.gen[i, ] <- new
         if(new.dist<best.dist){

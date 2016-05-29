@@ -1,6 +1,6 @@
 
 
-
+# Creates server where all calculation are done
 shinyServer(function(input, output, session) {
   
   # Combine the selected variables into a new data frame
@@ -13,10 +13,12 @@ shinyServer(function(input, output, session) {
     ntext()$solution
   })
   
+  # smallest value of function
   output$nText <- renderText({
     tail(ntext()$value,1)
   })
   
+  # create parameter for ui for optimization
   output$ui <- renderUI({
     algo <- input$algorithm
     
@@ -29,7 +31,7 @@ shinyServer(function(input, output, session) {
   })
   
   
-  
+  # function optimization part
   ntext <- eventReactive(input$goButton, {
     algo <-  AlgorithmsList[[input$algorithm]]
     to.evaluate <- input$parameters %>% strsplit(",") %>% unlist %>% gsub(" ", "", .) %>% 
@@ -60,7 +62,7 @@ shinyServer(function(input, output, session) {
     result
   })
   
-  # tsp part
+  # Data to optimize in TSP
   output$inputTSPtable <- renderUI({
     inFile <- input$file1
     
@@ -75,9 +77,7 @@ shinyServer(function(input, output, session) {
     
   })
   
-  
-  
-  
+  # TSP optimization part
   TSPsolution <- eventReactive(input$goButtonTSP, {
     inFile <- input$file1
     
@@ -99,14 +99,17 @@ shinyServer(function(input, output, session) {
     result
   })
   
-  
+  # Shortest path
   output$valuesTSP <- renderTable({
     data.frame(tail(t(TSPsolution()$solution),1))
   })
+  
+  # shortest path length text
   output$nTextTSP <- renderText({
     tail(TSPsolution()$path.length,1)
   })
   
+  # Shortest path HTML table
   output$BestPath <- renderUI({
     inFile <- input$file1
     
@@ -123,8 +126,7 @@ shinyServer(function(input, output, session) {
     
   })
   
-  
-  
+  # slider for plot
   output$uiTSPplot <- renderUI({
     if (is.null(TSPsolution)){
       return(NULL)
@@ -140,6 +142,7 @@ shinyServer(function(input, output, session) {
     }
   })
   
+  # plot output
   output$plotTSP <- renderPlot({
     if (is.null(TSPsolution())){
       return(NULL)
@@ -168,9 +171,3 @@ shinyServer(function(input, output, session) {
   
   
 })
-
-
-
-
-
-

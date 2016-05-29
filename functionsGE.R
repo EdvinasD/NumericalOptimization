@@ -9,6 +9,7 @@ readTSP.csv <- function(path) {
   vec[,-1]
 }
 
+# another type of data to read
 readTSPdist <- function(x) {
   data <- data.frame(read.csv(x))
   data <- c(as.character(data[,1]))
@@ -26,6 +27,7 @@ readTSPdist <- function(x) {
   mat
 }
 
+# distance calculation 
 TotalDistance2 <- function(vec,x){
   x <- melt(x)
   x$key <- paste(x$Var1, x$Var2)
@@ -33,7 +35,7 @@ TotalDistance2 <- function(vec,x){
 }
 
 
-# we will also create A function to visualise distance
+# function to visualise
 PlotDistances <- function(path, data){
   plot(rbind(data[path, ], data[path[1], ]), type="l", lwd=2)
   points(data,pch=16,col="red")
