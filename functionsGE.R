@@ -27,16 +27,4 @@ readTSPdist <- function(x) {
   mat
 }
 
-# distance calculation 
-TotalDistance2 <- function(vec,x){
-  x <- melt(x)
-  x$key <- paste(x$Var1, x$Var2)
-  sum(x[x$key %in% paste(vec, c(vec[-1], vec[1])),"value"])
-}
 
-
-# function to visualise
-PlotDistances <- function(path, data){
-  plot(rbind(data[path, ], data[path[1], ]), type="l", lwd=2)
-  points(data,pch=16,col="red")
-}

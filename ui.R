@@ -9,7 +9,6 @@ library(xtable)
 
 source("functions.R")
 source("GEfunction.R")
-source("functionsGE.R")
 
 shinyUI(
   navbarPage(

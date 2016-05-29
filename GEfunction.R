@@ -55,12 +55,12 @@ GEsemi <- function(x, P, n, muta1 = 1, muta2 = 1, check.mutations=F) {
       starting <- if (connection == 1) n.cities else connection-1
       ending <- connection %% n.cities + 1
       
-      # conetion in random neighbor
+      # connection in random neighbor
       sequance <- random.neightbor[
         which(random.neightbor==ele[(starting)]):
           which(random.neightbor==ele[(ending)])]
       
-      # replacemanet process
+      # replacement process
       if (!ele[connection]%in%sequance & length(sequance)>2) {
         choose.from <- sequance[!sequance%in%ele[c(starting,connection,ending)]]
         if (length(choose.from) == 1){
@@ -147,4 +147,11 @@ GEsemi <- function(x, P, n, muta1 = 1, muta2 = 1, check.mutations=F) {
     }
   }
   return(path.best)
+}
+
+# distance calculation 
+TotalDistance2 <- function(vec,x){
+  x <- melt(x)
+  x$key <- paste(x$Var1, x$Var2)
+  sum(x[x$key %in% paste(vec, c(vec[-1], vec[1])),"value"])
 }
