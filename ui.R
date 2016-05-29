@@ -33,14 +33,13 @@ shinyUI(
           )
           
         ))),
-    
     tabPanel(
       'Traveling Salesmen Problem',
       # csv file reading
       fluidPage(
-        titlePanel("Uploading Files"),
-        sidebarLayout(
-          sidebarPanel(
+        fluidRow(
+          column(
+            3,
             fileInput('file1', 'Choose file to upload',
                       accept = c(
                         'text/csv',
@@ -59,26 +58,39 @@ shinyUI(
                            Tab='\t'),
                          ','),
             tags$hr(),
-            p('If you want a sample .csv or .tsv file to upload,',
+            p(
               'you can first download the sample',
-              a(href = 'mtcars.csv', 'mtcars.csv'), 'or',
-              a(href = 'pressure.tsv', 'pressure.tsv'),
-              'files, and then try uploading them.'
-            )
+              a(href = 'https://raw.githubusercontent.com/EdvinasD/NumericalOptimization/master/burma14.csv', 'burma14.csv')
+            ),
+            tags$hr(),
+            uiOutput(outputId = "inputTSPtable")
           ),
-          mainPanel(
-            tableOutput('contents')
+          column(
+            3,
+            numericInput("TSP.P", "Population size",100),
+            numericInput("TSP.n", "Number of generations",100),
+            sliderInput("TSP.muta1", "Mutation type 1",min=0, max=1, value=0.05,step=0.01),
+            sliderInput("TSP.muta2", "Mutation type 2",min=0, max=1, value=0.05,step=0.01),
+            checkboxInput("TSP.checkmuta", "Check mutations", value = FALSE, width = NULL),
+            actionButton("goButtonTSP", "Optimize!"),
+            p("Shortest distance:"),
+            verbatimTextOutput("nTextTSP"),
+            uiOutput("uiTSPplot")
+            # tableOutput("valuesTSP"),
+            # uiOutput("uiTSPplot")
+          ),
+          column(
+            1,
+            p("Path"),
+            uiOutput(outputId = "BestPath")
+          ),
+          column(
+            5,
+            plotOutput('plotTSP')
           )
         )
       )
-      
-      
-      
-      
-      
-      
-      
-      
     )
   )
 )
+

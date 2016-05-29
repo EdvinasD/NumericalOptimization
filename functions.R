@@ -1,7 +1,7 @@
 
 ParticleSwarmOptimzation <- function(f, n_g, n_p, c_1, c_2, dim_f = 1){
-  P <- matrix(runif(n_p*dim_f),ncol=dim_f,nrow = n_p) #initial popltation
-  v <- matrix(runif(n_p*dim_f),ncol=dim_f,nrow = n_p) #initial valosity
+  P <- matrix(runif(n_p*dim_f),ncol=dim_f,nrow = n_p) #initial population
+  v <- matrix(runif(n_p*dim_f),ncol=dim_f,nrow = n_p) #initial velosity
   Fvalue <- apply(P,1,f)
   
   Pbest <- P
