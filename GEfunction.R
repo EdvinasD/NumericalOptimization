@@ -9,7 +9,8 @@ GEsemi <- function(x, P, n, muta1 = 1, muta2 = 1, check.mutations=F) {
   #      euclidean distances are calculated between x rows.
   #   P: population size
   #   n: number of itrations
-  #   muta: probability of having mutation 
+  #   muta1: probability of having mutation type 1
+  #   muta2: probability of having mutation type 2
   #
   # Returns:
   #   list of best path, and paths which led to that
