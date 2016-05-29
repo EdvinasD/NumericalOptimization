@@ -20,7 +20,7 @@ shinyServer(function(input, output, session) {
   output$ui <- renderUI({
     algo <- input$algorithm
     
-    dat_for_text <- AlgortihmsList[[algo]]
+    dat_for_text <- AlgorithmsList[[algo]]
     dat_for_text <- dat_for_text[names(dat_for_text)!="dim_f"]
     textas <- paste("fluidRow(",paste0("numericInput('",names(dat_for_text),
                                        "','",names(dat_for_text),"',",dat_for_text,")",collapse = ", "),")")
@@ -31,7 +31,7 @@ shinyServer(function(input, output, session) {
   
   
   ntext <- eventReactive(input$goButton, {
-    algo <-  AlgortihmsList[[input$algorithm]]
+    algo <-  AlgorithmsList[[input$algorithm]]
     to.evaluate <- input$parameters %>% strsplit(",") %>% unlist %>% gsub(" ", "", .) %>% 
       paste0("'", . , "'", collapse=",") %>% paste0("initial.x = c(", . , ")")
     eval(parse(text= to.evaluate ))
@@ -113,8 +113,10 @@ shinyServer(function(input, output, session) {
     if (is.null(inFile))
       return(NULL)
     
-    data.frame(tail(t(TSPsolution()$solution),1)) %>% t %>% 
-      stargazer(type = "html",summary = F,colnames = F,rownames=F) %>% 
+    tsp.path.best <- data.frame(tail(t(TSPsolution()$solution),1)) %>% t 
+    colnames(tsp.path.best) <- "Path"
+    tsp.path.best %>% 
+      stargazer(type = "html",summary = F,rownames=F) %>% 
       gsub('table style="text-align:center"',
            'table style="text-align:center;width:100%"', .) %>% 
       HTML
@@ -142,13 +144,23 @@ shinyServer(function(input, output, session) {
     if (is.null(TSPsolution())){
       return(NULL)
     }else{
-      solutionPlot <- TSPsolution()$solution
-      dataPlot <-  TSPsolution()$data
-      dsitancePlot <- TSPsolution()$path.length
-      PlotDistances(solutionPlot[,input$TSP.plot],dataPlot)
+      solution.plot <- TSPsolution()$solution
+      data.plot <-  TSPsolution()$data
+      dsitance.plot <- TSPsolution()$path.length
+      which.plot <- input$TSP.plot
+      
+      
+      plot(rbind(data.plot[solution.plot[,which.plot], ],
+                 data.plot[solution.plot[,which.plot][1],]), type="l", lwd=2)
+      grid()
+      lines(rbind(data.plot[solution.plot[,which.plot], ],
+                 data.plot[solution.plot[,which.plot][1],]), type="l", lwd=2,col='#CA4242')
+      points(data.plot,pch=16,col="#428BCA",cex = 3)
+      text(data.plot,label = 1:nrow(data.plot),col='white',adj = 0.5)
+      
       title(paste0("Acquired in generation: ",
-                   gsub("iter","",colnames(solutionPlot)[input$TSP.plot]),"\n",
-                   "Distance: ",round(dsitancePlot[input$TSP.plot],4)))
+                   gsub("iter","",colnames(solution.plot)[which.plot]),"\n",
+                   "Distance: ",round(dsitance.plot[which.plot],4)))
     }
   })
   

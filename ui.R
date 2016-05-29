@@ -21,7 +21,7 @@ shinyUI(
             4,
             "Selection",
             hr(),
-            selectInput('algorithm', 'Algorithm', names(AlgortihmsList)),
+            selectInput('algorithm', 'Algorithm', names(AlgorithmsList)),
             textInput('f', 'Function', value = '', width = NULL, placeholder = NULL),
             helpText("Example: (1-x)^2+100*(y-x^2)^2"),
             textInput('parameters', 'Variables to optimize', value = '', width = NULL, placeholder = NULL),
@@ -49,7 +49,7 @@ shinyUI(
       fluidPage(
         fluidRow(
           column(
-            3,
+            4,
             fileInput('file1', 'Choose file to upload',
                       accept = c(
                         'text/csv',
@@ -73,7 +73,16 @@ shinyUI(
               a(href = 'https://raw.githubusercontent.com/EdvinasD/NumericalOptimization/master/burma14.csv', 'burma14.csv')
             ),
             tags$hr(),
-            uiOutput(outputId = "inputTSPtable")
+            fluidRow(
+              column(
+                9,
+                uiOutput(outputId = "inputTSPtable")
+              ),
+              column(
+                3,
+                uiOutput(outputId = "BestPath")
+              )
+            )
           ),
           column(
             3,
@@ -86,13 +95,6 @@ shinyUI(
             p("Shortest distance:"),
             verbatimTextOutput("nTextTSP"),
             uiOutput("uiTSPplot")
-            # tableOutput("valuesTSP"),
-            # uiOutput("uiTSPplot")
-          ),
-          column(
-            1,
-            p("Path"),
-            uiOutput(outputId = "BestPath")
           ),
           column(
             5,

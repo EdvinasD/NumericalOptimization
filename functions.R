@@ -61,7 +61,7 @@ ThresholdAccepting <- function(f, treshold, n_rounds, n_steps, dim_f = 1){
 
 
 
-AlgortihmsList <- list(ParticleSwarmOptimzation=c(n_g = 5, n_p=100, c_1=0.5, c_2 = 0, dim_f=1),
+AlgorithmsList <- list(ParticleSwarmOptimzation=c(n_g = 5, n_p=100, c_1=0.5, c_2 = 0, dim_f=1),
                    ThresholdAccepting=c(treshold=0.5, n_rounds=100, n_steps=5, dim_f = 1))
 
 
